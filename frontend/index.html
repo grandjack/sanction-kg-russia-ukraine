@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>俄乌冲突经济制裁风险智能分析系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A2463;
+            --primary-light: #1E3A8A;
+            --accent: #D62828;
+            --accent-alt: #F77F00;
+            --success: #06A77D;
+            --warning: #EAB308;
+            --bg-dark: #0B0E1A;
+            --bg-card: #131826;
+            --bg-elevated: #1A1F35;
+            --text-primary: #E8EBF7;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --border: #2D3548;
+            --border-light: #3F4865;
+            --risk-high: #DC2626;
+            --risk-medium: #F59E0B;
+            --risk-low: #10B981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Background pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(45deg, var(--primary) 25%, transparent 25%),
+                linear-gradient(-45deg, var(--primary) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, var(--primary) 75%),
+                linear-gradient(-45deg, transparent 75%, var(--primary) 75%);
+            background-size: 60px 60px;
+            background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+            animation: patternMove 20s linear infinite;
+        }
+        
+        @keyframes patternMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+        
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(11, 14, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 3rem;
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(214, 40, 40, 0.3);
+        }
+        
+        .logo-text h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        
+        .logo-text p {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .header-badge {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Navigation */
+        nav {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 90px;
+            z-index: 99;
+        }
+        
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .nav-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+        }
+        
+        .nav-item.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background: var(--bg-elevated);
+        }
+        
+        /* Main content */
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: var(--border-light);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        /* Hero section */
+        .hero-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-alt) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+        
+        /* Search box */
+        .search-box-large {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+        
+        .search-input-large {
+            width: 100%;
+            padding: 1.5rem 1.5rem 1.5rem 4rem;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+        
+        .search-input-large:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(214, 40, 40, 0.1);
+        }
+        
+        .search-icon-large {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
+        .search-btn {
+            margin-top: 1.5rem;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(214, 40, 40, 0.4);
+        }
+        
+        /* Quick questions */
+        .quick-questions {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .quick-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .question-btn {
+            padding: 1rem 1.5rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+        }
+        
+        .question-btn:hover {
+            border-color: var(--accent);
+            background: var(--bg-card);
+            transform: translateX(4px);
+        }
+        
+        /* Risk summary */
+        .risk-summary {
+            background: linear-gradient(135deg, rgba(214, 40, 40, 0.1) 0%, rgba(247, 127, 0, 0.05) 100%);
+            border: 2px solid var(--risk-high);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .risk-summary.medium {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(247, 127, 0, 0.05) 100%);
+            border-color: var(--risk-medium);
+        }
+        
+        .risk-summary.low {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 167, 125, 0.05) 100%);
+            border-color: var(--risk-low);
+        }
+        
+        .risk-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .risk-badge.high {
+            background: var(--risk-high);
+            color: white;
+        }
+        
+        .risk-badge.medium {
+            background: var(--risk-medium);
+            color: white;
+        }
+        
+        .risk-badge.low {
+            background: var(--risk-low);
+            color: white;
+        }
+        
+        .recommendation {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .recommendation.negative {
+            color: var(--risk-high);
+        }
+        
+        /* Answer content */
+        .answer-section {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .answer-content {
+            background: var(--bg-elevated);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .answer-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .answer-content strong {
+            color: var(--accent-alt);
+        }
+        
+        .evidence-ref {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.5rem;
+            background: rgba(214, 40, 40, 0.2);
+            color: var(--accent);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .evidence-ref:hover {
+            background: rgba(214, 40, 40, 0.3);
+        }
+        
+        /* Graph visualization */
+        .graph-container {
+            background: var(--bg-elevated);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-family: 'IBM Plex Mono', monospace;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .graph-placeholder {
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .graph-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Evidence cards */
+        .evidence-card {
+            background: var(--bg-elevated);
+            border-left: 4px solid var(--accent-alt);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .evidence-source {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+        
+        .evidence-text {
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .evidence-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        
+        /* Path visualization */
+        .path-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+        }
+        
+        .path-node {
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            min-width: 160px;
+            text-align: center;
+        }
+        
+        .path-node.risk-high {
+            border-color: var(--risk-high);
+            background: rgba(220, 38, 38, 0.1);
+        }
+        
+        .path-node-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+        
+        .path-node-type {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .path-arrow {
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .path-edge-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'DM Sans', sans-serif;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(214, 40, 40, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-card);
+            border-color: var(--border-light);
+        }
+        
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(214, 40, 40, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+        
+        .stat-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-change {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-change.positive {
+            color: var(--success);
+        }
+        
+        .stat-change.negative {
+            color: var(--accent);
+        }
+        
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 1rem;
+        }
+        
+        .data-table thead th {
+            background: var(--bg-elevated);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+        
+        .data-table tbody tr:hover {
+            background: var(--bg-elevated);
+        }
+        
+        .data-table tbody td {
+            padding: 1rem;
+            color: var(--text-primary);
+        }
+        
+        /* Entity detail */
+        .entity-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .entity-field {
+            margin-bottom: 1rem;
+        }
+        
+        .entity-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.25rem;
+        }
+        
+        .entity-value {
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        /* Search page */
+        .search-page-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-select {
+            padding: 0.75rem 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .search-result-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-result-item:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+        
+        .search-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .search-result-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .search-result-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        /* Image placeholder */
+        .img-placeholder {
+            background: var(--bg-elevated);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            main {
+                padding: 1.5rem;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .question-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .entity-card {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+        }
+        
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <header>
+        <div class="header-content">
+            <div class="logo" onclick="navigateTo('qa')">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 2v20M2 12h20"/>
+                        <circle cx="12" cy="12" r="3" fill="white"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>俄乌冲突制裁风险分析系统</h1>
+                    <p>Russia-Ukraine Conflict Sanction Risk Analysis</p>
+                </div>
+            </div>
+            
+            <div class="header-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                </svg>
+                知识图谱驱动
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="nav-container">
+            <div class="nav-item active" data-page="qa">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                </svg>
+                智能查询
+            </div>
+            <div class="nav-item" data-page="dashboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                风险监控
+            </div>
+            <div class="nav-item" data-page="search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                </svg>
+                实体检索
+            </div>
+            <div class="nav-item" data-page="system">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+                数据管理
+            </div>
+        </div>
+    </nav>
+    
+    <main>
+        <!-- Smart Query Page -->
+        <div id="qa" class="page active">
+            <div id="searchInterface">
+                <div class="hero-section">
+                    <h1 class="hero-title">俄乌冲突相关制裁风险查询</h1>
+                    <p class="hero-subtitle">基于多源制裁清单与新闻事件的知识图谱智能分析</p>
+                    
+                    <div class="search-box-large">
+                        <svg class="search-icon-large" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input 
+                            type="text" 
+                            class="search-input-large" 
+                            id="questionInput"
+                            placeholder="例如：Rosneft 与哪些欧美企业有业务往来？"
+                        >
+                    </div>
+                    
+                    <button class="search-btn" onclick="analyzeQuestion()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        开始分析
+                    </button>
+                </div>
+                
+                <div class="quick-questions">
+                    <div class="quick-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 11 12 14 22 4"/>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                        </svg>
+                        快速查询
+                    </div>
+                    <div class="question-grid">
+                        <button class="question-btn" onclick="askPredefined('Rosneft 与哪些欧美企业有业务往来？')">
+                            Rosneft 与哪些欧美企业有业务往来？
+                        </button>
+                        <button class="question-btn" onclick="askPredefined('Wagner Group 的资金来源网络是什么？')">
+                            Wagner Group 的资金来源网络是什么？
+                        </button>
+                        <button class="question-btn" onclick="askPredefined('Gazprom 当前制裁状态如何？')">
+                            Gazprom 当前制裁状态如何？
+                        </button>
+                        <button class="question-btn" onclick="askPredefined('近期有哪些新增的俄罗斯相关制裁实体？')">
+                            近期有哪些新增的俄罗斯相关制裁实体？
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Answer Interface -->
+            <div id="answerInterface" class="hidden">
+                <div class="answer-section">
+                    <div class="risk-summary high">
+                        <div>
+                            <div class="risk-badge high">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                </svg>
+                                HIGH RISK (0.92)
+                            </div>
+                            <div style="margin-top: 1rem; font-size: 1.1rem; color: var(--text-secondary);">
+                                实体：Rosneft (俄罗斯石油公司)
+                            </div>
+                        </div>
+                        <div class="recommendation negative">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; margin-right: 0.5rem;">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            禁止合作
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">风险分析结论</h2>
+                            <button class="btn btn-secondary" onclick="exportReport()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                导出报告
+                            </button>
+                        </div>
+                        
+                        <div class="answer-content">
+                            <p>根据知识图谱分析，<strong>Rosneft (俄罗斯石油公司)</strong> 存在以下制裁关联风险：</p>
+                            
+                            <p>
+                                <strong>1. 直接制裁状态</strong> 
+                                <span class="evidence-ref" onclick="scrollToEvidence('evd1')">[证据1]</span><br>
+                                该实体于2022年3月被美国财政部OFAC列入SDN清单，制裁原因为"支持俄罗斯联邦政府对乌克兰的军事侵略行动"。同时被欧盟、英国、加拿大等多个司法管辖区制裁。
+                            </p>
+                            
+                            <p>
+                                <strong>2. 欧美企业关联</strong> 
+                                <span class="evidence-ref" onclick="scrollToEvidence('evd2')">[证据2]</span>
+                                <span class="evidence-ref" onclick="scrollToEvidence('evd3')">[证据3]</span><br>
+                                通过图谱分析发现，Rosneft 在2022年2月前与多家欧美能源企业存在合资项目关联，包括 BP (英国石油)、ExxonMobil (埃克森美孚) 等。这些企业已于2022年2-4月期间陆续宣布终止与Rosneft的业务关系。
+                            </p>
+                            
+                            <p>
+                                <strong>3. 资金网络风险</strong> 
+                                <span class="evidence-ref" onclick="scrollToEvidence('evd4')">[证据4]</span><br>
+                                该实体属于高风险金融网络，通过离岸公司结构与多个被制裁的俄罗斯银行和金融机构存在资金往来关系。图谱显示其核心控股股东为俄罗斯联邦政府(持股50%+)。
+                            </p>
+                            
+                            <p style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+                                <strong>合规建议</strong><br>
+                                基于当前制裁状态和关联网络分析，该实体属于 <strong style="color: var(--risk-high);">极高风险 (HIGH)</strong> 类别。任何直接或间接的业务往来均可能触发制裁违规。建议：<br>
+                                • 立即终止所有现有业务关系<br>
+                                • 冻结相关资金和资产<br>
+                                • 避免与其关联方进行交易<br>
+                                • 定期监控制裁清单更新
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Graph Visualization -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">关联网络图谱</h2>
+                        </div>
+                        
+                        <div class="graph-container">
+                            <div class="graph-placeholder">
+                                <div class="img-placeholder">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="3" y1="9" x2="21" y2="9"/>
+                                        <line x1="9" y1="21" x2="9" y2="9"/>
+                                    </svg>
+                                    <p style="margin-top: 1rem;">关联网络可视化图谱</p>
+                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                                        展示 Rosneft 与制裁实体、欧美企业的关联关系<br>
+                                        (建议使用 D3.js 或 Cytoscape.js 实现动态图谱)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Risk Paths -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">关键风险路径</h2>
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <div class="entity-label" style="margin-bottom: 1rem;">路径 1 - 政府控股关系 (风险权重: 0.45)</div>
+                            <div class="path-container">
+                                <div class="path-node risk-high">
+                                    <div class="path-node-name">Russian Federation</div>
+                                    <div class="path-node-type">Government | 制裁国家</div>
+                                </div>
+                                <div class="path-arrow">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="5" y1="12" x2="19" y2="12"/>
+                                        <polyline points="12 5 19 12 12 19"/>
+                                    </svg>
+                                    <div class="path-edge-label">majority_shareholder (50%+)</div>
+                                </div>
+                                <div class="path-node risk-high">
+                                    <div class="path-node-name">Rosneft</div>
+                                    <div class="path-node-type">Organization | OFAC/EU制裁</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <div class="entity-label" style="margin-bottom: 1rem;">路径 2 - 终止业务关系 (风险权重: 0.32)</div>
+                            <div class="path-container">
+                                <div class="path-node">
+                                    <div class="path-node-name">BP plc</div>
+                                    <div class="path-node-type">Organization | 英国</div>
+                                </div>
+                                <div class="path-arrow">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="5" y1="12" x2="19" y2="12"/>
+                                        <line x1="12" y1="5" x2="12" y2="19"/>
+                                    </svg>
+                                    <div class="path-edge-label">former_joint_venture (terminated 2022-02)</div>
+                                </div>
+                                <div class="path-node risk-high">
+                                    <div class="path-node-name">Rosneft</div>
+                                    <div class="path-node-type">Organization | OFAC/EU制裁</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="entity-label" style="margin-bottom: 1rem;">路径 3 - 金融网络关联 (风险权重: 0.28)</div>
+                            <div class="path-container">
+                                <div class="path-node risk-high">
+                                    <div class="path-node-name">VTB Bank</div>
+                                    <div class="path-node-type">Organization | OFAC制裁</div>
+                                </div>
+                                <div class="path-arrow">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="5" y1="12" x2="19" y2="12"/>
+                                        <polyline points="12 5 19 12 12 19"/>
+                                    </svg>
+                                    <div class="path-edge-label">financial_transaction</div>
+                                </div>
+                                <div class="path-node">
+                                    <div class="path-node-name">Offshore Holdings</div>
+                                    <div class="path-node-type">Organization</div>
+                                </div>
+                                <div class="path-arrow">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="5" y1="12" x2="19" y2="12"/>
+                                        <polyline points="12 5 19 12 12 19"/>
+                                    </svg>
+                                    <div class="path-edge-label">beneficial_owner</div>
+                                </div>
+                                <div class="path-node risk-high">
+                                    <div class="path-node-name">Rosneft</div>
+                                    <div class="path-node-type">Organization</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Evidence -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">证据溯源</h2>
+                        </div>
+                        
+                        <div class="evidence-card" id="evd1">
+                            <div class="evidence-source">[证据1] OFAC SDN List | 2022-03-02</div>
+                            <div class="evidence-text">
+                                "ROSNEFT OIL COMPANY (a.k.a. PUBLIC JOINT STOCK COMPANY ROSNEFT OIL COMPANY), Moscow, Russia; Designated pursuant to Executive Order 14024 for being or having been a person that operates or has operated in the energy sector of the Russian Federation economy."
+                            </div>
+                            <div class="evidence-meta">
+                                <span>🔗 evidence_id: evd_ofac_20220302_rosneft</span>
+                                <span>⚡ confidence: 1.00 (官方清单)</span>
+                                <span>📊 entity: ent_rosneft</span>
+                            </div>
+                        </div>
+                        
+                        <div class="evidence-card" id="evd2">
+                            <div class="evidence-source">[证据2] Financial Times | 2022-02-27</div>
+                            <div class="evidence-text">
+                                "BP announces it will exit its 19.75% shareholding in Rosneft, Russia's state-controlled oil company, following Russia's invasion of Ukraine. The move will result in charges of up to $25bn for the UK oil major."
+                            </div>
+                            <div class="evidence-meta">
+                                <span>🔗 evidence_id: evd_ft_20220227_bp_rosneft</span>
+                                <span>⚡ confidence: 0.95</span>
+                                <span>📊 graph_path: ent_bp → former_shareholder → ent_rosneft</span>
+                            </div>
+                        </div>
+                        
+                        <div class="evidence-card" id="evd3">
+                            <div class="evidence-source">[证据3] Reuters | 2022-03-01</div>
+                            <div class="evidence-text">
+                                "ExxonMobil announced it would discontinue operations and withdraw from joint ventures with Rosneft in Russia, including the Sakhalin-1 project, citing the country's military action in Ukraine."
+                            </div>
+                            <div class="evidence-meta">
+                                <span>🔗 evidence_id: evd_reuters_20220301_exxon</span>
+                                <span>⚡ confidence: 0.94</span>
+                                <span>📊 graph_path: ent_exxonmobil → terminated_joint_venture → ent_rosneft</span>
+                            </div>
+                        </div>
+                        
+                        <div class="evidence-card" id="evd4">
+                            <div class="evidence-source">[证据4] 知识图谱分析 | 2026-02-06</div>
+                            <div class="evidence-text">
+                                "Graph analysis identified Rosneft as a central node in high-risk financial network comm_russia_energy_17, which includes 8 OFAC-sanctioned entities and 23 entities with government ownership structure. Primary shareholder: Russian Federation (50%+ equity stake)."
+                            </div>
+                            <div class="evidence-meta">
+                                <span>🔗 evidence_id: evd_graph_rosneft_network</span>
+                                <span>⚡ confidence: 0.97</span>
+                                <span>📊 algorithm: HGT-RAM community detection</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="backToSearch()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12"/>
+                                <polyline points="12 19 5 12 12 5"/>
+                            </svg>
+                            返回继续查询
+                        </button>
+                        <button class="btn btn-primary" onclick="viewEntityDetail()">
+                            查看实体详情
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">俄乌冲突制裁监控概览</h2>
+                    <span style="font-family: 'IBM Plex Mono', monospace; color: var(--text-secondary);">最后更新: 2026-02-06 14:23:45</span>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">俄罗斯被制裁实体</div>
+                        <div class="stat-value">2,847</div>
+                        <div class="stat-change negative">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            +67 本周
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">关联风险实体</div>
+                        <div class="stat-value">8,234</div>
+                        <div class="stat-change negative">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            +192 本周
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">监控关系边</div>
+                        <div class="stat-value">43,892</div>
+                        <div class="stat-change positive">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            +1,284 本周
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">证据条目</div>
+                        <div class="stat-value">67,429</div>
+                        <div class="stat-change positive">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            +2,103 本周
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">核心制裁实体监控</h2>
+                    <button class="btn btn-secondary">导出列表</button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>实体名称</th>
+                            <th>实体类型</th>
+                            <th>风险等级</th>
+                            <th>制裁机构</th>
+                            <th>主要风险来源</th>
+                            <th>最后更新</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="viewEntityDetail()">
+                            <td><strong>Rosneft</strong></td>
+                            <td>Organization</td>
+                            <td><span class="risk-badge high">HIGH</span></td>
+                            <td>OFAC, EU, UK</td>
+                            <td>政府控股+能源部门</td>
+                            <td>2026-02-06</td>
+                        </tr>
+                        <tr onclick="viewEntityDetail()">
+                            <td><strong>Gazprom</strong></td>
+                            <td>Organization</td>
+                            <td><span class="risk-badge high">HIGH</span></td>
+                            <td>OFAC, EU</td>
+                            <td>天然气部门+政府关联</td>
+                            <td>2026-02-05</td>
+                        </tr>
+                        <tr onclick="viewEntityDetail()">
+                            <td><strong>Wagner Group</strong></td>
+                            <td>Organization</td>
+                            <td><span class="risk-badge high">HIGH</span></td>
+                            <td>OFAC, EU, UN</td>
+                            <td>雇佣军组织+军事活动</td>
+                            <td>2026-02-04</td>
+                        </tr>
+                        <tr onclick="viewEntityDetail()">
+                            <td><strong>VTB Bank</strong></td>
+                            <td>Organization</td>
+                            <td><span class="risk-badge high">HIGH</span></td>
+                            <td>OFAC, EU, UK</td>
+                            <td>国有银行+金融部门</td>
+                            <td>2026-02-03</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">最新制裁动态</h2>
+                </div>
+                
+                <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--accent);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <strong>EU 新增23个俄罗斯实体至制裁清单</strong>
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">2026-02-03</span>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        欧盟委员会宣布新一轮制裁措施，针对支持俄罗斯军事工业综合体的23个实体，包括国防承包商、能源企业及相关金融机构。
+                    </p>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <span class="risk-badge high" style="font-size: 0.75rem; padding: 0.25rem 0.75rem;">新增23个</span>
+                        <span style="color: var(--text-muted); font-size: 0.85rem;">来源: EU Official Journal</span>
+                    </div>
+                </div>
+                
+                <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--warning);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <strong>美国扩大对俄罗斯能源部门制裁范围</strong>
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;">2026-02-01</span>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        美国财政部OFAC更新SDN清单，新增涉及俄罗斯石油和天然气开采、运输、炼化业务的12个实体及其关联高管。
+                    </p>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <span class="risk-badge medium" style="font-size: 0.75rem; padding: 0.25rem 0.75rem;">新增12个</span>
+                        <span style="color: var(--text-muted); font-size: 0.85rem;">来源: OFAC SDN List</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Entity Search Page -->
+        <div id="search" class="page">
+            <div class="search-page-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">实体检索</h2>
+                    </div>
+                    
+                    <div class="search-box-large">
+                        <svg class="search-icon-large" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input 
+                            type="text" 
+                            class="search-input-large" 
+                            placeholder="输入实体名称、别名或标识符..."
+                        >
+                    </div>
+                    
+                    <div class="search-filters">
+                        <select class="filter-select">
+                            <option>所有类型</option>
+                            <option>Organization</option>
+                            <option>Person</option>
+                            <option>Location</option>
+                        </select>
+                        <select class="filter-select">
+                            <option>所有风险等级</option>
+                            <option>HIGH</option>
+                            <option>MEDIUM</option>
+                            <option>LOW</option>
+                        </select>
+                        <select class="filter-select">
+                            <option>所有制裁机构</option>
+                            <option>OFAC</option>
+                            <option>EU</option>
+                            <option>UK</option>
+                            <option>UN</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="search-result-item" onclick="viewEntityDetail()">
+                    <div class="search-result-header">
+                        <div>
+                            <div class="search-result-name">Rosneft Oil Company (Роснефть)</div>
+                            <div class="search-result-meta">
+                                <span>Organization</span>
+                                <span>•</span>
+                                <span>俄罗斯莫斯科</span>
+                                <span>•</span>
+                                <span>INN: 7706107510</span>
+                            </div>
+                        </div>
+                        <span class="risk-badge high">HIGH RISK</span>
+                    </div>
+                    <div style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        俄罗斯国有石油公司，由俄罗斯联邦政府控股，主要从事石油天然气勘探开采业务...
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <span style="padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">OFAC制裁</span>
+                        <span style="padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">EU制裁</span>
+                        <span style="padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">UK制裁</span>
+                    </div>
+                </div>
+                
+                <div class="search-result-item" onclick="viewEntityDetail()">
+                    <div class="search-result-header">
+                        <div>
+                            <div class="search-result-name">Gazprom PJSC (Газпром)</div>
+                            <div class="search-result-meta">
+                                <span>Organization</span>
+                                <span>•</span>
+                                <span>俄罗斯莫斯科</span>
+                                <span>•</span>
+                                <span>INN: 7736050003</span>
+                            </div>
+                        </div>
+                        <span class="risk-badge high">HIGH RISK</span>
+                    </div>
+                    <div style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        俄罗斯最大的天然气开采和供应企业，国家控股，占全球天然气储量约17%...
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <span style="padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">OFAC制裁</span>
+                        <span style="padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">EU制裁</span>
+                    </div>
+                </div>
+                
+                <div class="search-result-item" onclick="viewEntityDetail()">
+                    <div class="search-result-header">
+                        <div>
+                            <div class="search-result-name">Wagner Group (PMC Wagner)</div>
+                            <div class="search-result-meta">
+                                <span>Organization</span>
+                                <span>•</span>
+                                <span>俄罗斯</span>
+                                <span>•</span>
+                                <span>雇佣军组织</span>
+                            </div>
+                        </div>
+                        <span class="risk-badge high">HIGH RISK</span>
+                    </div>
+                    <div style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        俄罗斯私人军事承包商组织，参与乌克兰、叙利亚、非洲等地军事行动...
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <span style="padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">OFAC制裁</span>
+                        <span style="padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">EU制裁</span>
+                        <span style="padding: 0.25rem 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem;">UN制裁</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Management Page -->
+        <div id="system" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">数据快照管理</h2>
+                    <button class="btn btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        新建导入
+                    </button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>数据源</th>
+                            <th>类型</th>
+                            <th>快照版本</th>
+                            <th>记录数</th>
+                            <th>导入时间</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>OFAC SDN List</strong></td>
+                            <td>制裁清单</td>
+                            <td>2026-02-05</td>
+                            <td>11,234</td>
+                            <td>2026-02-05 16:30:05</td>
+                            <td><span style="color: var(--success);">✓ 已导入</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>EU Sanctions List</strong></td>
+                            <td>制裁清单</td>
+                            <td>2026-02-03</td>
+                            <td>8,947</td>
+                            <td>2026-02-03 10:15:22</td>
+                            <td><span style="color: var(--success);">✓ 已导入</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>GDELT Russia-Ukraine</strong></td>
+                            <td>新闻语料</td>
+                            <td>2026-02-06</td>
+                            <td>3,847</td>
+                            <td>2026-02-06 08:00:12</td>
+                            <td><span style="color: var(--success);">✓ 已导入</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reuters Russia Coverage</strong></td>
+                            <td>新闻语料</td>
+                            <td>2026-02-04</td>
+                            <td>1,923</td>
+                            <td>2026-02-04 14:22:33</td>
+                            <td><span style="color: var(--success);">✓ 已导入</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">知识抽取任务</h2>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>任务ID</th>
+                            <th>数据源</th>
+                            <th>文档数</th>
+                            <th>抽取结果</th>
+                            <th>完成时间</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code style="font-family: 'IBM Plex Mono', monospace;">task_20260206_001</code></td>
+                            <td>GDELT Russia-Ukraine</td>
+                            <td>3,847</td>
+                            <td>实体: 4,829 | 关系: 12,384 | 事件: 1,247</td>
+                            <td>2026-02-06 09:45:23</td>
+                            <td><span style="color: var(--success);">✓ 已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td><code style="font-family: 'IBM Plex Mono', monospace;">task_20260204_002</code></td>
+                            <td>Reuters Russia Coverage</td>
+                            <td>1,923</td>
+                            <td>实体: 2,384 | 关系: 6,192 | 事件: 647</td>
+                            <td>2026-02-04 16:12:45</td>
+                            <td><span style="color: var(--success);">✓ 已完成</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Navigation
+        function navigateTo(pageId) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            window.scrollTo(0, 0);
+        }
+        
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const pageId = this.getAttribute('data-page');
+                navigateTo(pageId);
+            });
+        });
+        
+        // Q&A Page
+        function askPredefined(question) {
+            document.getElementById('questionInput').value = question;
+            analyzeQuestion();
+        }
+        
+        function analyzeQuestion() {
+            document.getElementById('searchInterface').classList.add('hidden');
+            document.getElementById('answerInterface').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+        
+        function backToSearch() {
+            document.getElementById('searchInterface').classList.remove('hidden');
+            document.getElementById('answerInterface').classList.add('hidden');
+            document.getElementById('questionInput').value = '';
+            window.scrollTo(0, 0);
+        }
+        
+        function scrollToEvidence(evidenceId) {
+            const element = document.getElementById(evidenceId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.style.background = 'rgba(247, 127, 0, 0.2)';
+                setTimeout(() => {
+                    element.style.background = '';
+                }, 2000);
+            }
+        }
+        
+        function exportReport() {
+            alert('报告导出功能 - 需连接后端API实现');
+        }
+        
+        function viewEntityDetail() {
+            alert('实体详情页面 - 将展示完整的实体信息、风险分析、关系网络等');
+        }
+        
+        // Enter key
+        document.getElementById('questionInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                analyzeQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
