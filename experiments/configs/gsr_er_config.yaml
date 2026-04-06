@@ -1,0 +1,92 @@
+# =============================================================
+# GSR-ER (Chapter 3) Configuration
+# Graph-guided Self-Refine for Entity-Relation Extraction
+# =============================================================
+
+seed: 42
+
+# --- Entity & Relation Schema (Section 3.2) ---
+entity_types:
+  - Person
+  - Organization
+  - Company
+  - LegalEntity
+  - Vessel
+  - Airplane
+  - Sanction
+  - Security
+  - CryptoWallet
+  - Address
+
+relation_types:
+  - PLAYS_SIGNIFICANT_ROLE_IN
+  - SANCTIONED_BY
+  - FAMILY_RELATIONSHIP
+  - ACTS_FOR
+  - LEADER_OF
+  - OWNS
+  - LOCATED_AT
+
+# Domain/Range constraints for schema validation (Section 3.3)
+# Valid(es, r, eo) = 1[type(es) in Dom(r)] * 1[type(eo) in Ran(r)] * 1[evidence != null]
+relation_constraints:
+  PLAYS_SIGNIFICANT_ROLE_IN:
+    domain: [Person]
+    range: [Organization, Company, LegalEntity]
+  SANCTIONED_BY:
+    domain: [Person, Organization, Company, LegalEntity, Vessel, Airplane, CryptoWallet]
+    range: [Sanction]
+  FAMILY_RELATIONSHIP:
+    domain: [Person]
+    range: [Person]
+  ACTS_FOR:
+    domain: [Person, Organization, Company]
+    range: [Person, Organization, Company, LegalEntity]
+  LEADER_OF:
+    domain: [Person]
+    range: [Organization, Company, LegalEntity]
+  OWNS:
+    domain: [Person, Organization, Company, LegalEntity]
+    range: [Company, Vessel, Airplane, CryptoWallet, Address]
+  LOCATED_AT:
+    domain: [Person, Organization, Company, LegalEntity, Vessel, Airplane]
+    range: [Address]
+
+# --- Graph Context (Section 3.3.1) ---
+graph_context:
+  k_hop: 2                    # k-hop neighbourhood for context injection
+  max_neighbors: 20           # Maximum neighbours per hop
+  include_types: true         # Include entity type information
+  include_relations: true     # Include relation type information
+
+# --- Self-Refine (Section 3.3.2) ---
+self_refine:
+  max_iterations: 3           # K_max = 3
+  confidence_threshold: 0.7   # tau = 0.7
+  convergence_delta: 0.01     # Stop when delta(F1) < 0.01
+
+# --- LLM Settings (simulated in prototype) ---
+llm:
+  model: "gpt-4o"
+  temperature: 0.0
+  max_tokens: 4096
+  simulated: true             # Use mock responses for thesis prototype
+
+# --- Data Settings ---
+data:
+  num_documents: 1200         # Total annotated documents
+  entity_mentions: 18645      # Total entity mentions
+  relation_annotations: 8932  # Total relation annotations
+  train_ratio: 0.6
+  val_ratio: 0.2
+  test_ratio: 0.2
+
+# --- Evaluation ---
+evaluation:
+  metrics:
+    - entity_precision
+    - entity_recall
+    - entity_f1
+    - relation_precision
+    - relation_recall
+    - relation_f1

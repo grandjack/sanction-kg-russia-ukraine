@@ -1,0 +1,83 @@
+# =============================================================
+# HGT-RAM (Chapter 4) Configuration
+# Hierarchical Graph-Temporal Risk Assessment Model
+# =============================================================
+
+seed: 42
+
+# --- Weighted Personalized PageRank (Section 4.2.1) ---
+# Equation (4.1): PR(v) = (1-d)*w(v) + d*sum_{u in N(v)} PR(u)*w_edge(u,v)/Z(u)
+pagerank:
+  damping_factor: 0.85        # d = 0.85
+  convergence_delta: 1.0e-6   # delta = 10^-6
+  max_iterations: 100
+  # Personalization vector weights
+  w_high: 1.0                 # Sanctioned entities
+  w_low: 0.1                  # Direct neighbours of sanctioned
+  w_epsilon: 0.01             # All other entities
+
+# --- Edge Weights by Relation Type (Section 4.2.1) ---
+edge_weights:
+  OWNS: 0.9
+  LEADER_OF: 0.8
+  ACTS_FOR: 0.85
+  FAMILY_RELATIONSHIP: 0.6
+  SANCTIONED_BY: 1.0
+  PLAYS_SIGNIFICANT_ROLE_IN: 0.88
+  LOCATED_AT: 0.3
+
+# --- Leiden Community Detection (Section 4.2.2) ---
+# CommRisk(v) = (1/|C(v)|) * sum_{u in C(v)} [eta*PR(u) + (1-eta)*Lambda_u]
+leiden:
+  resolution: 1.2             # gamma_L = 1.2
+  eta: 0.6                    # eta for community risk blend
+
+# --- Hawkes Process (Section 4.3) ---
+# lambda_v(t) = mu_v + sum_{t_i < t} eta_H * exp(-rho*(t-t_i))
+# Constraint: eta_H / rho < 1 (stationarity)
+hawkes:
+  eta_h_init: 0.5             # Initial triggering kernel intensity
+  rho_init: 1.0               # Initial decay rate
+  mu_init: 0.1                # Initial base intensity
+  optimizer: "L-BFGS-B"       # Optimization method
+  max_iter: 200               # Max optimization iterations
+  stationarity_constraint: true  # Enforce eta_H / rho < 1
+
+# --- Adaptive Fusion (Section 4.4) ---
+# Risk(v) = alpha_v*PR_hat(v) + beta_v*CommRisk_hat(v) + gamma_v*Lambda_hat(v)
+# (alpha_v, beta_v, gamma_v) = softmax(W*a_v + b)
+fusion:
+  feature_dim: 9              # q = 9 (node feature dimension)
+  # Expert initialization: (alpha0, beta0, gamma0) = (0.4, 0.3, 0.3)
+  expert_alpha: 0.4
+  expert_beta: 0.3
+  expert_gamma: 0.3
+  # bias init: b = (0, -0.288, -0.288) to produce softmax ~(0.4, 0.3, 0.3)
+  bias_init: [0.0, -0.288, -0.288]
+
+# --- Pairwise Ranking Loss (Section 4.4.1) ---
+# L = (1/|S|) * sum max(0, Delta + Risk(v-) - Risk(v+)) + lambda_reg*||W||^2_F
+ranking:
+  margin: 0.1                 # Delta = 0.1
+  lambda_reg: 1.0e-3          # Regularization
+  k_neg: 20                   # Negative samples per positive
+  neg_sampling:
+    one_hop_ratio: 0.5        # 50% 1-hop neighbours
+    two_hop_ratio: 0.3        # 30% 2-hop neighbours
+    random_ratio: 0.2         # 20% random
+  learning_rate: 0.01
+  num_epochs: 100
+  batch_size: 32
+
+# --- Time Settings ---
+time:
+  t0: "2022-02-24"            # Conflict start
+  t1: "2025-12-31"            # Observation end
+  t_split: "2025-06-01"       # Train/validation split
+
+# --- Evaluation ---
+evaluation:
+  ks: [10, 20, 50]
+  metrics:
+    - "P@K"
+    - "NDCG@K"
