@@ -966,6 +966,318 @@
         .hidden {
             display: none !important;
         }
+
+        /* Hawkes Timeline View */
+        .hawkes-timeline {
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hawkes-chart {
+            position: relative;
+            height: 180px;
+            margin-top: 1rem;
+            border-left: 2px solid var(--border);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .hawkes-chart svg { width: 100%; height: 100%; }
+
+        .hawkes-event-markers {
+            display: flex;
+            gap: 0;
+            margin-top: 0.5rem;
+            padding-left: 2px;
+            position: relative;
+            height: 40px;
+        }
+
+        .hawkes-event-marker {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateX(-50%);
+        }
+
+        .hawkes-event-marker .marker-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg-elevated);
+        }
+
+        .hawkes-event-marker .marker-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            margin-top: 2px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .hawkes-axis-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+            margin-top: 0.25rem;
+            padding-left: 2px;
+        }
+
+        .hawkes-y-label {
+            position: absolute;
+            left: -2.5rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .hawkes-legend {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .hawkes-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .hawkes-legend-color {
+            width: 16px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .hawkes-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Alert Panel */
+        .alert-panel {
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .alert-item:last-child { border-bottom: none; }
+
+        .alert-item:hover { background: rgba(255,255,255,0.02); }
+
+        .alert-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-icon.threshold { background: rgba(220, 38, 38, 0.2); color: var(--risk-high); }
+        .alert-icon.change { background: rgba(245, 158, 11, 0.2); color: var(--risk-medium); }
+        .alert-icon.association { background: rgba(247, 127, 0, 0.2); color: var(--accent-alt); }
+        .alert-icon.community { background: rgba(6, 167, 125, 0.2); color: var(--success); }
+
+        .alert-content { flex: 1; }
+
+        .alert-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .alert-type-badge {
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .alert-type-badge.threshold { background: rgba(220, 38, 38, 0.15); color: var(--risk-high); }
+        .alert-type-badge.change { background: rgba(245, 158, 11, 0.15); color: var(--risk-medium); }
+        .alert-type-badge.association { background: rgba(247, 127, 0, 0.15); color: var(--accent-alt); }
+        .alert-type-badge.community { background: rgba(6, 167, 125, 0.15); color: var(--success); }
+
+        /* Risk mini bars in table */
+        .risk-mini-bars {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            height: 28px;
+        }
+
+        .risk-mini-bar {
+            width: 18px;
+            border-radius: 2px 2px 0 0;
+            position: relative;
+        }
+
+        .risk-mini-bar .bar-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 4px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            color: var(--text-primary);
+            font-family: 'IBM Plex Mono', monospace;
+            z-index: 10;
+        }
+
+        .risk-mini-bar:hover .bar-tooltip { display: block; }
+
+        /* Graph stats */
+        .graph-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .graph-stat-item {
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .graph-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .graph-stat-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 0.25rem;
+        }
+
+        .graph-stat-detail {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Report generation page */
+        .report-config {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .report-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .report-field label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .report-field input,
+        .report-field select,
+        .report-field textarea {
+            padding: 0.75rem 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .report-field textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .report-field input:focus,
+        .report-field select:focus,
+        .report-field textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .report-preview {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            line-height: 1.9;
+        }
+
+        .report-preview h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .report-section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-alt);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -1021,6 +1333,15 @@
                     <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
                 </svg>
                 实体检索
+            </div>
+            <div class="nav-item" data-page="report">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                报告生成
             </div>
             <div class="nav-item" data-page="system">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1170,16 +1491,16 @@
                         
                         <div class="graph-container">
                             <svg class="graph-svg" viewBox="0 0 760 480">
-                                <!-- Edges -->
-                                <line x1="380" y1="200" x2="130" y2="80" class="link"/>
-                                <line x1="380" y1="200" x2="630" y2="80" class="link"/>
-                                <line x1="380" y1="200" x2="130" y2="320" class="link"/>
-                                <line x1="380" y1="200" x2="630" y2="320" class="link"/>
-                                <line x1="380" y1="200" x2="200" y2="200" class="link"/>
-                                <line x1="380" y1="200" x2="560" y2="200" class="link"/>
-                                <line x1="380" y1="200" x2="380" y2="60" class="link"/>
-                                <line x1="130" y1="320" x2="130" y2="420" class="link" stroke-dasharray="4,4"/>
-                                <line x1="630" y1="80" x2="630" y2="320" class="link" stroke-dasharray="4,4" opacity="0.4"/>
+                                <!-- Edges with varying thickness for risk weight -->
+                                <line x1="380" y1="200" x2="130" y2="80" class="link" stroke-width="3"/>
+                                <line x1="380" y1="200" x2="630" y2="80" class="link" stroke-width="1.5" stroke-dasharray="4,4"/>
+                                <line x1="380" y1="200" x2="130" y2="320" class="link" stroke-width="2.5"/>
+                                <line x1="380" y1="200" x2="630" y2="320" class="link" stroke-width="1.5" stroke-dasharray="4,4"/>
+                                <line x1="380" y1="200" x2="200" y2="200" class="link" stroke-width="2"/>
+                                <line x1="380" y1="200" x2="560" y2="200" class="link" stroke-width="2"/>
+                                <line x1="380" y1="200" x2="380" y2="60" class="link" stroke-width="2.5"/>
+                                <line x1="130" y1="320" x2="130" y2="420" class="link" stroke-dasharray="4,4" stroke-width="1"/>
+                                <line x1="380" y1="200" x2="480" y2="380" class="link" stroke-width="1.5"/>
                                 <!-- Edge labels -->
                                 <text x="240" y="128" class="edge-label" text-anchor="middle">majority_shareholder</text>
                                 <text x="520" y="128" class="edge-label" text-anchor="middle">former_shareholder (exit 2022)</text>
@@ -1187,56 +1508,72 @@
                                 <text x="525" y="272" class="edge-label" text-anchor="middle">terminated_joint_venture</text>
                                 <text x="280" y="192" class="edge-label" text-anchor="middle">subsidiary</text>
                                 <text x="480" y="192" class="edge-label" text-anchor="middle">trade_partner</text>
-                                <text x="400" y="125" class="edge-label" text-anchor="start">controlled_by</text>
+                                <text x="400" y="125" class="edge-label" text-anchor="start">LEADER_OF</text>
                                 <text x="70" y="375" class="edge-label" text-anchor="middle">SWIFT_blocked</text>
-                                <!-- Center: Rosneft -->
-                                <circle cx="380" cy="200" r="36" fill="var(--risk-high)" opacity="0.9"/>
+                                <text x="445" y="300" class="edge-label" text-anchor="middle">SANCTIONED_BY</text>
+                                <!-- Center: Rosneft (Organization = rounded rect) -->
+                                <rect x="344" y="172" width="72" height="56" rx="10" fill="var(--risk-high)" opacity="0.9"/>
                                 <text x="380" y="197" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="DM Sans, sans-serif">Rosneft</text>
                                 <text x="380" y="212" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9" font-family="DM Sans, sans-serif">ORG | 0.92</text>
-                                <!-- Russian Federation -->
-                                <circle cx="130" cy="80" r="28" fill="var(--risk-high)" opacity="0.85"/>
+                                <!-- Russian Federation (Organization = rounded rect) -->
+                                <rect x="102" y="56" width="56" height="48" rx="8" fill="var(--risk-high)" opacity="0.85"/>
                                 <text x="130" y="77" text-anchor="middle" fill="white" font-size="10" font-weight="600" font-family="DM Sans, sans-serif">Russian</text>
                                 <text x="130" y="89" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9" font-family="DM Sans, sans-serif">GOV</text>
-                                <!-- BP -->
-                                <circle cx="630" cy="80" r="28" fill="var(--primary-light)" opacity="0.8"/>
+                                <!-- BP (Organization = rounded rect) -->
+                                <rect x="602" y="56" width="56" height="48" rx="8" fill="var(--primary-light)" opacity="0.8"/>
                                 <text x="630" y="77" text-anchor="middle" fill="white" font-size="11" font-weight="600" font-family="DM Sans, sans-serif">BP plc</text>
                                 <text x="630" y="89" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9" font-family="DM Sans, sans-serif">ORG | UK</text>
-                                <!-- VTB Bank -->
-                                <circle cx="130" cy="320" r="28" fill="var(--risk-high)" opacity="0.85"/>
+                                <!-- VTB Bank (Organization = rounded rect) -->
+                                <rect x="102" y="296" width="56" height="48" rx="8" fill="var(--risk-high)" opacity="0.85"/>
                                 <text x="130" y="317" text-anchor="middle" fill="white" font-size="10" font-weight="600" font-family="DM Sans, sans-serif">VTB Bank</text>
                                 <text x="130" y="329" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9" font-family="DM Sans, sans-serif">ORG | 0.89</text>
-                                <!-- ExxonMobil -->
-                                <circle cx="630" cy="320" r="28" fill="var(--primary-light)" opacity="0.8"/>
+                                <!-- ExxonMobil (Organization = rounded rect) -->
+                                <rect x="602" y="296" width="56" height="48" rx="8" fill="var(--primary-light)" opacity="0.8"/>
                                 <text x="630" y="317" text-anchor="middle" fill="white" font-size="10" font-weight="600" font-family="DM Sans, sans-serif">ExxonMobil</text>
                                 <text x="630" y="329" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9" font-family="DM Sans, sans-serif">ORG | US</text>
-                                <!-- Rosneft Deutschland -->
-                                <circle cx="200" cy="200" r="22" fill="var(--risk-medium)" opacity="0.8"/>
+                                <!-- Rosneft Deutschland (Organization = rounded rect) -->
+                                <rect x="178" y="186" width="44" height="28" rx="6" fill="var(--risk-medium)" opacity="0.8"/>
                                 <text x="200" y="198" text-anchor="middle" fill="white" font-size="9" font-weight="600" font-family="DM Sans, sans-serif">Rosneft DE</text>
-                                <text x="200" y="208" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8" font-family="DM Sans, sans-serif">ORG</text>
-                                <!-- Gazprom -->
-                                <circle cx="560" cy="200" r="24" fill="var(--risk-high)" opacity="0.85"/>
+                                <text x="200" y="208" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="7" font-family="DM Sans, sans-serif">ORG</text>
+                                <!-- Gazprom (Organization = rounded rect) -->
+                                <rect x="536" y="184" width="48" height="32" rx="7" fill="var(--risk-high)" opacity="0.85"/>
                                 <text x="560" y="198" text-anchor="middle" fill="white" font-size="10" font-weight="600" font-family="DM Sans, sans-serif">Gazprom</text>
                                 <text x="560" y="208" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9" font-family="DM Sans, sans-serif">ORG | 0.90</text>
-                                <!-- Igor Sechin (CEO) -->
+                                <!-- Igor Sechin (Person = circle) -->
                                 <circle cx="380" cy="60" r="22" fill="var(--risk-high)" opacity="0.85"/>
                                 <text x="380" y="57" text-anchor="middle" fill="white" font-size="9" font-weight="600" font-family="DM Sans, sans-serif">I. Sechin</text>
                                 <text x="380" y="67" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8" font-family="DM Sans, sans-serif">PERSON</text>
-                                <!-- Offshore Holdings -->
-                                <circle cx="130" cy="420" r="20" fill="var(--bg-elevated)" stroke="var(--border-light)" stroke-width="1.5"/>
+                                <!-- Offshore Holdings (Organization = rounded rect, unknown risk) -->
+                                <rect x="110" y="404" width="40" height="32" rx="6" fill="var(--bg-elevated)" stroke="var(--border-light)" stroke-width="1.5"/>
                                 <text x="130" y="418" text-anchor="middle" fill="var(--text-secondary)" font-size="8" font-weight="600" font-family="DM Sans, sans-serif">Offshore</text>
                                 <text x="130" y="428" text-anchor="middle" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">Holdings</text>
+                                <!-- OFAC Sanction Program (diamond shape for sanction) -->
+                                <polygon points="480,360 510,380 480,400 450,380" fill="var(--accent-alt)" opacity="0.8"/>
+                                <text x="480" y="378" text-anchor="middle" fill="white" font-size="8" font-weight="600" font-family="DM Sans, sans-serif">OFAC</text>
+                                <text x="480" y="388" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="7" font-family="DM Sans, sans-serif">EO14024</text>
                                 <!-- Legend -->
                                 <rect x="16" y="448" width="728" height="28" rx="6" fill="var(--bg-card)" opacity="0.8"/>
-                                <circle cx="36" cy="462" r="6" fill="var(--risk-high)" opacity="0.85"/>
-                                <text x="48" y="465" fill="var(--text-muted)" font-size="9" font-family="DM Sans, sans-serif">Sanctioned (HIGH)</text>
-                                <circle cx="170" cy="462" r="6" fill="var(--risk-medium)" opacity="0.8"/>
-                                <text x="182" y="465" fill="var(--text-muted)" font-size="9" font-family="DM Sans, sans-serif">Partial sanctions</text>
-                                <circle cx="310" cy="462" r="6" fill="var(--primary-light)" opacity="0.8"/>
-                                <text x="322" y="465" fill="var(--text-muted)" font-size="9" font-family="DM Sans, sans-serif">Non-sanctioned</text>
-                                <circle cx="440" cy="462" r="6" fill="var(--bg-elevated)" stroke="var(--border-light)" stroke-width="1.5"/>
-                                <text x="452" y="465" fill="var(--text-muted)" font-size="9" font-family="DM Sans, sans-serif">Unknown risk</text>
-                                <line x1="560" y1="462" x2="580" y2="462" stroke="var(--border-light)" stroke-width="1.5" stroke-dasharray="4,4"/>
-                                <text x="588" y="465" fill="var(--text-muted)" font-size="9" font-family="DM Sans, sans-serif">Indirect / Terminated</text>
+                                <!-- Shape legend -->
+                                <circle cx="36" cy="462" r="6" fill="var(--text-muted)" opacity="0.5"/>
+                                <text x="48" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">Person</text>
+                                <rect x="89" y="456" width="12" height="12" rx="2" fill="var(--text-muted)" opacity="0.5"/>
+                                <text x="106" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">Organization</text>
+                                <polygon points="185,456 191,462 185,468 179,462" fill="var(--text-muted)" opacity="0.5"/>
+                                <text x="196" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">Sanction</text>
+                                <!-- Color legend -->
+                                <text x="260" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">|</text>
+                                <rect x="275" y="458" width="10" height="10" rx="2" fill="var(--risk-high)" opacity="0.85"/>
+                                <text x="290" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">HIGH</text>
+                                <rect x="325" y="458" width="10" height="10" rx="2" fill="var(--risk-medium)" opacity="0.8"/>
+                                <text x="340" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">MEDIUM</text>
+                                <rect x="393" y="458" width="10" height="10" rx="2" fill="var(--primary-light)" opacity="0.8"/>
+                                <text x="408" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">Non-sanctioned</text>
+                                <!-- Edge legend -->
+                                <text x="500" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">|</text>
+                                <line x1="515" y1="462" x2="535" y2="462" stroke="var(--border-light)" stroke-width="3"/>
+                                <text x="540" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">High weight</text>
+                                <line x1="610" y1="462" x2="630" y2="462" stroke="var(--border-light)" stroke-width="1.5" stroke-dasharray="4,4"/>
+                                <text x="636" y="465" fill="var(--text-muted)" font-size="8" font-family="DM Sans, sans-serif">Terminated</text>
                             </svg>
                         </div>
                     </div>
@@ -1406,8 +1743,30 @@
                 
                 <div class="dashboard-grid">
                     <div class="stat-card">
-                        <div class="stat-label">俄罗斯被制裁实体</div>
-                        <div class="stat-value">2,847</div>
+                        <div class="stat-label">实体节点</div>
+                        <div class="stat-value">23,618</div>
+                        <div class="stat-change negative">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            +127 本周
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">关系边</div>
+                        <div class="stat-value">57,342</div>
+                        <div class="stat-change negative">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="18 15 12 9 6 15"/>
+                            </svg>
+                            +1,284 本周
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">制裁事件</div>
+                        <div class="stat-value">9,486</div>
                         <div class="stat-change negative">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="18 15 12 9 6 15"/>
@@ -1415,29 +1774,7 @@
                             +67 本周
                         </div>
                     </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-label">关联风险实体</div>
-                        <div class="stat-value">8,234</div>
-                        <div class="stat-change negative">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="18 15 12 9 6 15"/>
-                            </svg>
-                            +192 本周
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-label">监控关系边</div>
-                        <div class="stat-value">43,892</div>
-                        <div class="stat-change positive">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="18 15 12 9 6 15"/>
-                            </svg>
-                            +1,284 本周
-                        </div>
-                    </div>
-                    
+
                     <div class="stat-card">
                         <div class="stat-label">证据条目</div>
                         <div class="stat-value">67,429</div>
@@ -1460,49 +1797,165 @@
                     </div>
                 </div>
                 
+                <div class="search-filters" style="margin-top: 1rem; margin-bottom: 0;">
+                    <select class="filter-select">
+                        <option>所有实体类型</option>
+                        <option>Organization</option>
+                        <option>Person</option>
+                        <option>Vessel</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>所有社群</option>
+                        <option>comm_russia_energy_17</option>
+                        <option>comm_russia_finance_08</option>
+                        <option>comm_russia_defense_03</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>所有风险等级</option>
+                        <option>HIGH</option>
+                        <option>MEDIUM</option>
+                        <option>LOW</option>
+                    </select>
+                </div>
+
                 <table class="data-table">
                     <thead>
                         <tr>
                             <th>实体名称</th>
-                            <th>实体类型</th>
+                            <th>类型</th>
                             <th>风险等级</th>
+                            <th>风险分量 (PPR / Comm / Hawkes)</th>
                             <th>制裁机构</th>
-                            <th>主要风险来源</th>
-                            <th>最后更新</th>
+                            <th>社群</th>
+                            <th>更新</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr onclick="viewEntityDetail()">
                             <td><strong>Rosneft</strong></td>
-                            <td>Organization</td>
-                            <td><span class="risk-badge high">HIGH</span></td>
+                            <td>ORG</td>
+                            <td><span class="risk-badge high">0.92</span></td>
+                            <td>
+                                <div class="risk-mini-bars">
+                                    <div class="risk-mini-bar" style="height: 88%; background: var(--risk-high);">
+                                        <span class="bar-tooltip">PPR: 0.88</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 91%; background: var(--risk-medium);">
+                                        <span class="bar-tooltip">Comm: 0.91</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 85%; background: var(--accent-alt);">
+                                        <span class="bar-tooltip">Hawkes: 0.85</span>
+                                    </div>
+                                </div>
+                            </td>
                             <td>OFAC, EU, UK</td>
-                            <td>政府控股+能源部门</td>
-                            <td>2026-02-06</td>
+                            <td style="font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace;">energy_17</td>
+                            <td>02-06</td>
                         </tr>
                         <tr onclick="viewEntityDetail()">
                             <td><strong>Gazprom</strong></td>
-                            <td>Organization</td>
-                            <td><span class="risk-badge high">HIGH</span></td>
+                            <td>ORG</td>
+                            <td><span class="risk-badge high">0.90</span></td>
+                            <td>
+                                <div class="risk-mini-bars">
+                                    <div class="risk-mini-bar" style="height: 86%; background: var(--risk-high);">
+                                        <span class="bar-tooltip">PPR: 0.86</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 89%; background: var(--risk-medium);">
+                                        <span class="bar-tooltip">Comm: 0.89</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 82%; background: var(--accent-alt);">
+                                        <span class="bar-tooltip">Hawkes: 0.82</span>
+                                    </div>
+                                </div>
+                            </td>
                             <td>OFAC, EU</td>
-                            <td>天然气部门+政府关联</td>
-                            <td>2026-02-05</td>
-                        </tr>
-                        <tr onclick="viewEntityDetail()">
-                            <td><strong>Wagner Group</strong></td>
-                            <td>Organization</td>
-                            <td><span class="risk-badge high">HIGH</span></td>
-                            <td>OFAC, EU, UN</td>
-                            <td>雇佣军组织+军事活动</td>
-                            <td>2026-02-04</td>
+                            <td style="font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace;">energy_17</td>
+                            <td>02-05</td>
                         </tr>
                         <tr onclick="viewEntityDetail()">
                             <td><strong>VTB Bank</strong></td>
-                            <td>Organization</td>
-                            <td><span class="risk-badge high">HIGH</span></td>
+                            <td>ORG</td>
+                            <td><span class="risk-badge high">0.89</span></td>
+                            <td>
+                                <div class="risk-mini-bars">
+                                    <div class="risk-mini-bar" style="height: 84%; background: var(--risk-high);">
+                                        <span class="bar-tooltip">PPR: 0.84</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 90%; background: var(--risk-medium);">
+                                        <span class="bar-tooltip">Comm: 0.90</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 87%; background: var(--accent-alt);">
+                                        <span class="bar-tooltip">Hawkes: 0.87</span>
+                                    </div>
+                                </div>
+                            </td>
                             <td>OFAC, EU, UK</td>
-                            <td>国有银行+金融部门</td>
-                            <td>2026-02-03</td>
+                            <td style="font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace;">finance_08</td>
+                            <td>02-03</td>
+                        </tr>
+                        <tr onclick="viewEntityDetail()">
+                            <td><strong>Wagner Group</strong></td>
+                            <td>ORG</td>
+                            <td><span class="risk-badge high">0.88</span></td>
+                            <td>
+                                <div class="risk-mini-bars">
+                                    <div class="risk-mini-bar" style="height: 79%; background: var(--risk-high);">
+                                        <span class="bar-tooltip">PPR: 0.79</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 93%; background: var(--risk-medium);">
+                                        <span class="bar-tooltip">Comm: 0.93</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 91%; background: var(--accent-alt);">
+                                        <span class="bar-tooltip">Hawkes: 0.91</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>OFAC, EU, UN</td>
+                            <td style="font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace;">defense_03</td>
+                            <td>02-04</td>
+                        </tr>
+                        <tr onclick="viewEntityDetail()">
+                            <td><strong>Igor Sechin</strong></td>
+                            <td>PER</td>
+                            <td><span class="risk-badge high">0.87</span></td>
+                            <td>
+                                <div class="risk-mini-bars">
+                                    <div class="risk-mini-bar" style="height: 82%; background: var(--risk-high);">
+                                        <span class="bar-tooltip">PPR: 0.82</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 88%; background: var(--risk-medium);">
+                                        <span class="bar-tooltip">Comm: 0.88</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 83%; background: var(--accent-alt);">
+                                        <span class="bar-tooltip">Hawkes: 0.83</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>OFAC, EU</td>
+                            <td style="font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace;">energy_17</td>
+                            <td>02-02</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sovcomflot</strong></td>
+                            <td>ORG</td>
+                            <td><span class="risk-badge medium">0.64</span></td>
+                            <td>
+                                <div class="risk-mini-bars">
+                                    <div class="risk-mini-bar" style="height: 58%; background: var(--risk-high);">
+                                        <span class="bar-tooltip">PPR: 0.58</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 71%; background: var(--risk-medium);">
+                                        <span class="bar-tooltip">Comm: 0.71</span>
+                                    </div>
+                                    <div class="risk-mini-bar" style="height: 55%; background: var(--accent-alt);">
+                                        <span class="bar-tooltip">Hawkes: 0.55</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>OFAC, UK</td>
+                            <td style="font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace;">energy_17</td>
+                            <td>02-01</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1541,6 +1994,93 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Alert/Warning Panel (§5.2.3 预警规则与通知机制) -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">风险预警通知</h2>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span class="demo-badge">DEMO DATA</span>
+                        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--text-muted);">4 条未处理</span>
+                    </div>
+                </div>
+
+                <div class="alert-panel">
+                    <div class="alert-item">
+                        <div class="alert-icon threshold">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">阈值预警：Novatek 风险分值突破高风险阈值</div>
+                            <div class="alert-desc">实体 Novatek (ent_novatek_001) 综合风险分值从 0.62 升至 0.78，超过预设阈值 0.75。主要驱动因素：社群风险聚合上升 (CommRisk: 0.71 → 0.84)。</div>
+                            <div class="alert-meta">
+                                <span class="alert-type-badge threshold">阈值预警</span>
+                                <span>触发时间: 2026-02-06 11:23:05</span>
+                                <span>版本: v20260206-003</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon change">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">变动预警：Sovcomflot 风险分值异常波动 (+23%)</div>
+                            <div class="alert-desc">实体 Sovcomflot 综合风险分值在相邻版本间变化幅度达 23%，超过预设变动阈值 15%。Hawkes 动态风险分量显著上升 (0.35 → 0.55)。</div>
+                            <div class="alert-meta">
+                                <span class="alert-type-badge change">变动预警</span>
+                                <span>触发时间: 2026-02-05 09:17:42</span>
+                                <span>版本: v20260205-001</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon association">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                            </svg>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">关联预警：Rosneft 关联方新增制裁事件</div>
+                            <div class="alert-desc">Rosneft 的直接关联方 Rosneft Deutschland GmbH 被 EU 新增列入制裁清单 (Regulation 2026/XXX)，涉及资产冻结与交易限制措施。</div>
+                            <div class="alert-meta">
+                                <span class="alert-type-badge association">关联预警</span>
+                                <span>触发时间: 2026-02-03 14:55:18</span>
+                                <span>证据: evd_eu_20260203_rosneft_de</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon community">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">社群预警：comm_russia_finance_08 社群平均风险上升</div>
+                            <div class="alert-desc">俄罗斯金融社群 (comm_russia_finance_08) 平均风险水平从 0.61 升至 0.73，涉及 12 个实体，其中 VTB Bank、Sberbank 为核心节点。</div>
+                            <div class="alert-meta">
+                                <span class="alert-type-badge community">社群预警</span>
+                                <span>触发时间: 2026-02-02 08:30:11</span>
+                                <span>涉及实体: 12</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Entity Search Page -->
@@ -1568,7 +2108,9 @@
                             <option>所有类型</option>
                             <option>Organization</option>
                             <option>Person</option>
-                            <option>Location</option>
+                            <option>Vessel / Airplane</option>
+                            <option>LegalEntity</option>
+                            <option>Address</option>
                         </select>
                         <select class="filter-select">
                             <option>所有风险等级</option>
@@ -1861,6 +2403,97 @@
                         </div>
                     </div>
 
+                    <!-- Hawkes Timeline View (§5.2.3 时间线视图) -->
+                    <div class="card">
+                        <div class="detail-section-title">制裁事件时间线与 Hawkes 强度曲线</div>
+                        <div class="hawkes-timeline">
+                            <div class="hawkes-chart" style="position: relative;">
+                                <span class="hawkes-y-label">Hawkes Intensity λ(t)</span>
+                                <svg viewBox="0 0 600 160" preserveAspectRatio="none">
+                                    <!-- Grid lines -->
+                                    <line x1="0" y1="40" x2="600" y2="40" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,4"/>
+                                    <line x1="0" y1="80" x2="600" y2="80" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,4"/>
+                                    <line x1="0" y1="120" x2="600" y2="120" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,4"/>
+                                    <!-- Y-axis labels -->
+                                    <text x="-4" y="42" fill="var(--text-muted)" font-size="9" text-anchor="end" font-family="IBM Plex Mono, monospace">0.9</text>
+                                    <text x="-4" y="82" fill="var(--text-muted)" font-size="9" text-anchor="end" font-family="IBM Plex Mono, monospace">0.6</text>
+                                    <text x="-4" y="122" fill="var(--text-muted)" font-size="9" text-anchor="end" font-family="IBM Plex Mono, monospace">0.3</text>
+                                    <!-- Hawkes intensity curve -->
+                                    <path d="M0,140 L30,138 L55,135 L60,42 L75,58 L95,72 L120,85 L150,95 L175,100 L195,102 L200,48 L215,62 L235,78 L260,88 L290,95 L320,100 L345,105 L355,55 L370,68 L390,80 L415,90 L440,96 L460,99 L475,45 L490,60 L510,75 L535,85 L560,92 L580,96 L600,98"
+                                          fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <!-- Intensity fill -->
+                                    <path d="M0,140 L30,138 L55,135 L60,42 L75,58 L95,72 L120,85 L150,95 L175,100 L195,102 L200,48 L215,62 L235,78 L260,88 L290,95 L320,100 L345,105 L355,55 L370,68 L390,80 L415,90 L440,96 L460,99 L475,45 L490,60 L510,75 L535,85 L560,92 L580,96 L600,98 L600,155 L0,155 Z"
+                                          fill="url(#hawkesGradient)" opacity="0.3"/>
+                                    <!-- Risk threshold line -->
+                                    <line x1="0" y1="60" x2="600" y2="60" stroke="var(--risk-high)" stroke-width="1" stroke-dasharray="6,3" opacity="0.6"/>
+                                    <text x="604" y="63" fill="var(--risk-high)" font-size="8" font-family="IBM Plex Mono, monospace" opacity="0.8">threshold</text>
+                                    <!-- Event trigger markers -->
+                                    <line x1="60" y1="0" x2="60" y2="155" stroke="var(--accent-alt)" stroke-width="1" stroke-dasharray="2,3" opacity="0.5"/>
+                                    <line x1="200" y1="0" x2="200" y2="155" stroke="var(--accent-alt)" stroke-width="1" stroke-dasharray="2,3" opacity="0.5"/>
+                                    <line x1="355" y1="0" x2="355" y2="155" stroke="var(--accent-alt)" stroke-width="1" stroke-dasharray="2,3" opacity="0.5"/>
+                                    <line x1="475" y1="0" x2="475" y2="155" stroke="var(--accent-alt)" stroke-width="1" stroke-dasharray="2,3" opacity="0.5"/>
+                                    <!-- Peak markers -->
+                                    <circle cx="60" cy="42" r="4" fill="var(--accent)" stroke="var(--bg-elevated)" stroke-width="2"/>
+                                    <circle cx="200" cy="48" r="4" fill="var(--accent)" stroke="var(--bg-elevated)" stroke-width="2"/>
+                                    <circle cx="355" cy="55" r="4" fill="var(--accent)" stroke="var(--bg-elevated)" stroke-width="2"/>
+                                    <circle cx="475" cy="45" r="4" fill="var(--accent)" stroke="var(--bg-elevated)" stroke-width="2"/>
+                                    <defs>
+                                        <linearGradient id="hawkesGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.4"/>
+                                            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <div class="hawkes-event-markers">
+                                <div class="hawkes-event-marker" style="left: 10%;">
+                                    <div class="marker-dot"></div>
+                                    <div class="marker-label">2022-03 OFAC SDN</div>
+                                </div>
+                                <div class="hawkes-event-marker" style="left: 33%;">
+                                    <div class="marker-dot"></div>
+                                    <div class="marker-label">2023-02 EU扩展</div>
+                                </div>
+                                <div class="hawkes-event-marker" style="left: 59%;">
+                                    <div class="marker-dot"></div>
+                                    <div class="marker-label">2024-06 UK OFSI</div>
+                                </div>
+                                <div class="hawkes-event-marker" style="left: 79%;">
+                                    <div class="marker-dot"></div>
+                                    <div class="marker-label">2025-12 EU强化</div>
+                                </div>
+                            </div>
+                            <div class="hawkes-axis-labels">
+                                <span>2022-02</span>
+                                <span>2023-01</span>
+                                <span>2024-01</span>
+                                <span>2025-01</span>
+                                <span>2026-02</span>
+                            </div>
+                            <div class="hawkes-legend">
+                                <div class="hawkes-legend-item">
+                                    <div class="hawkes-legend-color" style="background: var(--accent);"></div>
+                                    <span>Hawkes 强度 λ(t)</span>
+                                </div>
+                                <div class="hawkes-legend-item">
+                                    <div class="hawkes-legend-dot" style="background: var(--accent);"></div>
+                                    <span>风险峰值</span>
+                                </div>
+                                <div class="hawkes-legend-item">
+                                    <div class="hawkes-legend-color" style="background: var(--accent-alt); height: 2px; border-top: 1px dashed var(--accent-alt);"></div>
+                                    <span>制裁事件触发</span>
+                                </div>
+                                <div class="hawkes-legend-item">
+                                    <div class="hawkes-legend-color" style="background: var(--risk-high); height: 2px; border-top: 1px dashed var(--risk-high);"></div>
+                                    <span>预警阈值</span>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); font-family: 'IBM Plex Mono', monospace;">
+                                Hawkes params: μ=0.05, η<sub>H</sub>=0.72, ρ=0.018/day | max λ(t) = 0.91 @ 2022-03-02
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Key Evidence -->
                     <div class="card">
                         <div class="detail-section-title">关键证据</div>
@@ -1889,8 +2522,223 @@
             </div>
         </div>
 
+        <!-- Report Generation Page (§5.1.2, §5.3.4 检索增强报告生成) -->
+        <div id="report" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">GraphRAG 报告生成</h2>
+                    <span class="demo-badge">DEMO DATA</span>
+                </div>
+
+                <div class="report-config">
+                    <div class="report-field">
+                        <label>目标实体</label>
+                        <input type="text" value="Novatek" placeholder="输入实体名称...">
+                    </div>
+                    <div class="report-field">
+                        <label>报告类型</label>
+                        <select>
+                            <option>综合合规审查报告</option>
+                            <option>风险趋势分析报告</option>
+                            <option>关联网络穿透报告</option>
+                            <option>制裁状态变更报告</option>
+                        </select>
+                    </div>
+                    <div class="report-field">
+                        <label>时间范围</label>
+                        <select>
+                            <option>2024-01 至今</option>
+                            <option>2023-01 至今</option>
+                            <option>2022-02 至今 (全部)</option>
+                            <option>最近6个月</option>
+                        </select>
+                    </div>
+                    <div class="report-field">
+                        <label>检索深度 (k-hop)</label>
+                        <select>
+                            <option>2-hop (推荐)</option>
+                            <option>1-hop</option>
+                            <option>3-hop</option>
+                        </select>
+                    </div>
+                    <div class="report-field" style="grid-column: span 2;">
+                        <label>自然语言查询 (可选)</label>
+                        <textarea placeholder="例如：请分析 Novatek 在 2024 年以来的制裁风险变化趋势及主要原因">请分析 Novatek 在 2024 年以来的制裁风险变化趋势及主要原因</textarea>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        生成报告
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportReport()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        导出 PDF
+                    </button>
+                </div>
+
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 2rem;">
+                    <span>检索路径: 图检索 + 语义检索联合</span>
+                    <span>检索耗时: 2.1s</span>
+                    <span>LLM 生成耗时: 4.7s</span>
+                    <span>总耗时: 6.8s</span>
+                </div>
+            </div>
+
+            <!-- Report Preview -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">报告预览</h2>
+                    <div style="display: flex; gap: 0.5rem; font-size: 0.8rem;">
+                        <span style="padding: 0.25rem 0.75rem; background: rgba(6,167,125,0.15); color: var(--success); border-radius: 4px;">事实准确率: 91.3%</span>
+                        <span style="padding: 0.25rem 0.75rem; background: rgba(6,167,125,0.15); color: var(--success); border-radius: 4px;">引用有效率: 93.4%</span>
+                    </div>
+                </div>
+
+                <div class="report-preview">
+                    <h3>Novatek 制裁风险变化趋势分析报告</h3>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; margin-bottom: 1.5rem;">
+                        生成时间: 2026-02-06 14:23:45 | 图谱版本: v20260206-003 | 模型: GraphRAG (完整)
+                    </div>
+
+                    <div class="report-section-label">一、实体概况</div>
+                    <p style="color: var(--text-secondary);">
+                        <strong style="color: var(--accent-alt);">Novatek (ПАО «НОВАТЭК»)</strong> 是俄罗斯最大的独立天然气生产商，总部位于莫斯科，主营液化天然气 (LNG) 生产与出口业务。
+                        截至评估时点，该实体<strong style="color: var(--risk-medium);">未被美国 OFAC 直接列入 SDN 清单</strong>，但已被欧盟列入部分限制措施名单。
+                        <span class="evidence-ref">[来源: OpenSanctions, 2025-12-15]</span>
+                    </p>
+
+                    <div class="report-section-label">二、风险变化趋势</div>
+                    <p style="color: var(--text-secondary);">
+                        基于 HGT-RAM 模型的时间序列分析，Novatek 的综合风险分值自 2024 年 1 月以来呈现<strong style="color: var(--risk-high);">显著上升趋势</strong>：
+                    </p>
+                    <ul style="color: var(--text-secondary); margin: 1rem 0 1rem 1.5rem; list-style: disc;">
+                        <li>2024-01: 综合风险 0.52 (MEDIUM)</li>
+                        <li>2024-06: 综合风险 0.61 (MEDIUM) — 触发因素：欧盟扩展能源领域制裁 <span class="evidence-ref">[来源: EU Official Journal, 2024-06-24]</span></li>
+                        <li>2025-03: 综合风险 0.68 (MEDIUM) — 触发因素：关联实体 Arctic LNG 2 项目受制裁 <span class="evidence-ref">[来源: OFAC SDN List, 2025-02-23]</span></li>
+                        <li>2026-02: 综合风险 0.78 (HIGH) — 触发因素：社群风险聚合上升 + Hawkes 动态激发</li>
+                    </ul>
+                    <p style="color: var(--text-secondary);">
+                        Hawkes 强度函数显示，2024 年以来的风险峰值出现在 2025-02-23 (λ=0.82)，对应 Arctic LNG 2 制裁事件的激发效应。当前强度值 λ(t)=0.71，仍高于基线水平 μ=0.05。
+                        <span class="evidence-ref">[来源: HGT-RAM 计算, v20260206-003]</span>
+                    </p>
+
+                    <div class="report-section-label">三、主要风险驱动因素</div>
+                    <p style="color: var(--text-secondary);">
+                        <strong style="color: var(--accent-alt);">1. 社群风险外溢 (CommRisk: 0.71 → 0.84):</strong> Novatek 所在社群 comm_russia_energy_17 中包含 8 个已被 OFAC 制裁的实体 (Rosneft, Gazprom 等)，社群整体风险水平持续上升。
+                        <span class="evidence-ref">[来源: Leiden 社群分析, v20260206-003]</span>
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong style="color: var(--accent-alt);">2. 间接控制关联:</strong> 图谱路径分析显示 Novatek → OWNED_BY → Mikhelson (0.23 equity) → ACTS_FOR → Novatek Management，其中 Mikhelson 已被 EU 列入制裁清单。
+                        <span class="evidence-ref">[来源: EU Regulation 269/2014, 2024-06-24]</span>
+                    </p>
+                    <p style="color: var(--text-secondary);">
+                        <strong style="color: var(--accent-alt);">3. 项目级制裁传导:</strong> Novatek 的 Arctic LNG 2 项目 (持股 60%) 被 OFAC 于 2025-02 直接制裁，通过 OWNS 关系传导风险至母公司。PPR 结构影响力分量从 0.48 升至 0.62。
+                        <span class="evidence-ref">[来源: OFAC SDN List, 2025-02-23]</span>
+                    </p>
+
+                    <div class="report-section-label">四、合规建议</div>
+                    <p style="color: var(--text-secondary);">
+                        Novatek 虽未被 OFAC 直接列入 SDN 清单，但基于上述分析：<br>
+                        <strong style="color: var(--risk-high);">风险等级：HIGH (0.78)</strong> — 建议进行增强尽职调查 (EDD)。<br>
+                        具体建议：<br>
+                        • 审查与 Novatek 相关的 LNG 贸易合同，评估是否涉及 Arctic LNG 2 项目<br>
+                        • 确认交易对手中是否包含 Mikhelson 及其关联方<br>
+                        • 持续监控 OFAC/EU 清单更新，关注 Novatek 被直接制裁的可能性<br>
+                        • 建议每月复核风险评分变化
+                    </p>
+
+                    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-muted);">
+                        <strong>证据引用汇总:</strong> 本报告共引用 5 条证据，其中 OFAC SDN List 2条、EU Official Journal 1条、OpenSanctions 1条、HGT-RAM 计算结果 1条。所有引用均已通过后处理校验。
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- System Management Page -->
         <div id="system" class="page">
+            <!-- Graph Statistics (§5.4.1 图谱规模与实验环境) -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">知识图谱规模统计</h2>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span class="demo-badge">DEMO DATA</span>
+                        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--text-muted);">图谱版本: v20260206-003</span>
+                    </div>
+                </div>
+
+                <div class="graph-stats-grid">
+                    <div class="graph-stat-item">
+                        <div class="graph-stat-value">23,618</div>
+                        <div class="graph-stat-label">实体节点</div>
+                        <div class="graph-stat-detail">Person: 8,472 | Org: 4,256 | Legal: 683 | Vessel: 1,087 | Addr: 5,831 | Sanction: 2,689</div>
+                    </div>
+                    <div class="graph-stat-item">
+                        <div class="graph-stat-value">57,342</div>
+                        <div class="graph-stat-label">关系边</div>
+                        <div class="graph-stat-detail">SANCTIONED_BY | OWNS | LEADER_OF | ACTS_FOR | FAMILY | LOCATED_AT | PLAYS_ROLE</div>
+                    </div>
+                    <div class="graph-stat-item">
+                        <div class="graph-stat-value">9,486</div>
+                        <div class="graph-stat-label">制裁事件</div>
+                        <div class="graph-stat-detail">覆盖 2022-02 至 2026-02 | 来源: OFAC, EU, UK OFSI, UN, OpenSanctions</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div style="background: var(--bg-elevated); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border);">
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">性能指标 (P95)</div>
+                        <div style="display: grid; gap: 0.5rem; font-size: 0.85rem;">
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>单实体查询</span>
+                                <span style="color: var(--success); font-family: 'IBM Plex Mono', monospace;">0.35s (目标 ≤2s)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>2-hop 路径查询</span>
+                                <span style="color: var(--success); font-family: 'IBM Plex Mono', monospace;">2.03s (目标 ≤5s)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>3-hop 路径查询</span>
+                                <span style="color: var(--warning); font-family: 'IBM Plex Mono', monospace;">4.82s (目标 ≤5s)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>最短路径计算</span>
+                                <span style="color: var(--success); font-family: 'IBM Plex Mono', monospace;">1.53s</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: var(--bg-elevated); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border);">
+                        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;">计算引擎</div>
+                        <div style="display: grid; gap: 0.5rem; font-size: 0.85rem;">
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>HGT-RAM 全图批处理</span>
+                                <span style="color: var(--text-primary); font-family: 'IBM Plex Mono', monospace;">18.6 min</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>HGT-RAM 增量触发</span>
+                                <span style="color: var(--text-primary); font-family: 'IBM Plex Mono', monospace;">42.3s</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>增量更新 (端到端)</span>
+                                <span style="color: var(--success); font-family: 'IBM Plex Mono', monospace;">4.2h (目标 ≤24h)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                                <span>图数据库</span>
+                                <span style="color: var(--text-primary); font-family: 'IBM Plex Mono', monospace;">Neo4j CE 5.15</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">数据快照管理</h2>
@@ -1932,6 +2780,14 @@
                             <td>2026-02-03</td>
                             <td>8,947</td>
                             <td>2026-02-03 10:15:22</td>
+                            <td><span style="color: var(--success);">✓ 已导入</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>OpenSanctions</strong></td>
+                            <td>聚合数据</td>
+                            <td>2026-02-05</td>
+                            <td>15,672</td>
+                            <td>2026-02-05 12:00:45</td>
                             <td><span style="color: var(--success);">✓ 已导入</span></td>
                         </tr>
                         <tr>
@@ -2047,7 +2903,11 @@
         }
         
         function exportReport() {
-            alert('报告导出功能 - 需连接后端API实现');
+            alert('报告导出功能 — 需连接后端 API 实现\n\n将通过 GraphRAG 流程生成结构化 PDF 报告，包含：\n• 风险评估结论与分值分解\n• 关键路径与证据引用\n• 合规建议');
+        }
+
+        function generateReport() {
+            alert('GraphRAG 报告生成流程已触发 — 需连接后端 API 实现\n\n执行流程：\n1. 意图识别 → 综合分析查询\n2. 图检索: Cypher 查询实体属性/邻域/路径\n3. 语义检索: FAISS 向量索引 Top-N 文本片段\n4. 上下文模板构造\n5. LLM 生成 + 后处理校验');
         }
 
         let previousPage = 'qa';
