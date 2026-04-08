@@ -7,23 +7,24 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0A2463;
-            --primary-light: #1E3A8A;
-            --accent: #D62828;
-            --accent-alt: #F77F00;
-            --success: #06A77D;
-            --warning: #EAB308;
-            --bg-dark: #0B0E1A;
-            --bg-card: #131826;
-            --bg-elevated: #1A1F35;
-            --text-primary: #E8EBF7;
-            --text-secondary: #9CA3AF;
-            --text-muted: #6B7280;
-            --border: #2D3548;
-            --border-light: #3F4865;
-            --risk-high: #DC2626;
-            --risk-medium: #F59E0B;
-            --risk-low: #10B981;
+            --primary: #0B1A3E;
+            --primary-light: #1A3A6E;
+            --accent: #00C6FF;
+            --accent-alt: #3A8DFF;
+            --success: #00E6A0;
+            --warning: #FFBC42;
+            --bg-dark: #060D1F;
+            --bg-card: #0B1630;
+            --bg-elevated: #0F1D42;
+            --text-primary: #E4EAF7;
+            --text-secondary: #8DA0C2;
+            --text-muted: #4E6590;
+            --border: #162952;
+            --border-light: #1E3A6E;
+            --risk-high: #FF4D6A;
+            --risk-medium: #FFBC42;
+            --risk-low: #00E6A0;
+            --glow-blue: rgba(0, 198, 255, 0.15);
         }
         
         * {
@@ -48,20 +49,11 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.03;
-            background-image: 
-                linear-gradient(45deg, var(--primary) 25%, transparent 25%),
-                linear-gradient(-45deg, var(--primary) 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, var(--primary) 75%),
-                linear-gradient(-45deg, transparent 75%, var(--primary) 75%);
-            background-size: 60px 60px;
-            background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
-            animation: patternMove 20s linear infinite;
-        }
-        
-        @keyframes patternMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(60px, 60px); }
+            opacity: 0.06;
+            background-image:
+                linear-gradient(0deg, rgba(0,198,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,198,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
         
         /* Header */
@@ -69,12 +61,15 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(11, 14, 26, 0.95);
+            background: rgba(6, 13, 31, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 1.5rem 3rem;
+            box-shadow: 0 2px 20px rgba(0, 198, 255, 0.08);
+            border-top: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent 0%, var(--accent) 30%, var(--accent-alt) 70%, transparent 100%) 1;
         }
-        
+
         .header-content {
             max-width: 1600px;
             margin: 0 auto;
@@ -98,7 +93,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px rgba(214, 40, 40, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 198, 255, 0.3);
         }
         
         .logo-text h1 {
@@ -205,7 +200,8 @@
         }
         
         .card:hover {
-            border-color: var(--border-light);
+            border-color: rgba(0, 198, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 198, 255, 0.05);
         }
         
         .card-header {
@@ -236,7 +232,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-alt) 100%);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -270,7 +266,7 @@
         .search-input-large:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(214, 40, 40, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 198, 255, 0.12);
         }
         
         .search-icon-large {
@@ -299,7 +295,7 @@
         
         .search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(214, 40, 40, 0.4);
+            box-shadow: 0 12px 32px rgba(0, 198, 255, 0.35);
         }
         
         /* Quick questions */
@@ -344,7 +340,7 @@
         
         /* Risk summary */
         .risk-summary {
-            background: linear-gradient(135deg, rgba(214, 40, 40, 0.1) 0%, rgba(247, 127, 0, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(255, 77, 106, 0.08) 0%, rgba(255, 77, 106, 0.02) 100%);
             border: 2px solid var(--risk-high);
             border-radius: 16px;
             padding: 2rem;
@@ -353,14 +349,14 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .risk-summary.medium {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(247, 127, 0, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(255, 188, 66, 0.08) 0%, rgba(255, 188, 66, 0.02) 100%);
             border-color: var(--risk-medium);
         }
-        
+
         .risk-summary.low {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 167, 125, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(0, 230, 160, 0.08) 0%, rgba(0, 230, 160, 0.02) 100%);
             border-color: var(--risk-low);
         }
         
@@ -427,7 +423,7 @@
             display: inline-flex;
             align-items: center;
             padding: 0.2rem 0.5rem;
-            background: rgba(214, 40, 40, 0.2);
+            background: rgba(0, 198, 255, 0.15);
             color: var(--accent);
             border-radius: 4px;
             font-size: 0.85rem;
@@ -436,9 +432,9 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .evidence-ref:hover {
-            background: rgba(214, 40, 40, 0.3);
+            background: rgba(0, 198, 255, 0.25);
         }
         
         /* Graph visualization */
@@ -471,7 +467,7 @@
         /* Evidence cards */
         .evidence-card {
             background: var(--bg-elevated);
-            border-left: 4px solid var(--accent-alt);
+            border-left: 4px solid var(--accent);
             padding: 1.5rem;
             border-radius: 8px;
             margin-bottom: 1rem;
@@ -522,7 +518,7 @@
         
         .path-node.risk-high {
             border-color: var(--risk-high);
-            background: rgba(220, 38, 38, 0.1);
+            background: rgba(255, 77, 106, 0.1);
         }
         
         .path-node-name {
@@ -572,7 +568,7 @@
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(214, 40, 40, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 198, 255, 0.35);
         }
         
         .btn-secondary {
@@ -596,7 +592,7 @@
         
         .stat-card {
             background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(0, 198, 255, 0.15);
             border-radius: 16px;
             padding: 2rem;
             position: relative;
@@ -610,7 +606,7 @@
             right: 0;
             width: 100px;
             height: 100px;
-            background: radial-gradient(circle, rgba(214, 40, 40, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 198, 255, 0.1) 0%, transparent 70%);
             border-radius: 50%;
             transform: translate(30%, -30%);
         }
@@ -793,12 +789,12 @@
             align-items: center;
             gap: 0.35rem;
             padding: 0.25rem 0.75rem;
-            background: rgba(234, 179, 8, 0.15);
-            border: 1px solid var(--warning);
+            background: rgba(0, 198, 255, 0.1);
+            border: 1px solid rgba(0, 198, 255, 0.4);
             border-radius: 6px;
             font-family: 'IBM Plex Mono', monospace;
             font-size: 0.7rem;
-            color: var(--warning);
+            color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }
@@ -886,7 +882,7 @@
         .tag.sanction {
             border-color: var(--risk-high);
             color: var(--risk-high);
-            background: rgba(220, 38, 38, 0.1);
+            background: rgba(255, 77, 106, 0.1);
         }
 
         .timeline-item {
@@ -918,9 +914,9 @@
             margin-right: 0.5rem;
         }
 
-        .timeline-badge.add { background: rgba(6, 167, 125, 0.2); color: var(--success); }
-        .timeline-badge.update { background: rgba(234, 179, 8, 0.2); color: var(--warning); }
-        .timeline-badge.deprecate { background: rgba(220, 38, 38, 0.2); color: var(--risk-high); }
+        .timeline-badge.add { background: rgba(0, 230, 160, 0.15); color: var(--success); }
+        .timeline-badge.update { background: rgba(255, 188, 66, 0.15); color: var(--warning); }
+        .timeline-badge.deprecate { background: rgba(255, 77, 106, 0.15); color: var(--risk-high); }
 
         /* SVG Graph styles */
         .graph-svg { width: 100%; height: 100%; }
@@ -1096,10 +1092,10 @@
             flex-shrink: 0;
         }
 
-        .alert-icon.threshold { background: rgba(220, 38, 38, 0.2); color: var(--risk-high); }
-        .alert-icon.change { background: rgba(245, 158, 11, 0.2); color: var(--risk-medium); }
-        .alert-icon.association { background: rgba(247, 127, 0, 0.2); color: var(--accent-alt); }
-        .alert-icon.community { background: rgba(6, 167, 125, 0.2); color: var(--success); }
+        .alert-icon.threshold { background: rgba(255, 77, 106, 0.15); color: var(--risk-high); }
+        .alert-icon.change { background: rgba(255, 188, 66, 0.15); color: var(--risk-medium); }
+        .alert-icon.association { background: rgba(58, 141, 255, 0.15); color: var(--accent-alt); }
+        .alert-icon.community { background: rgba(0, 230, 160, 0.15); color: var(--success); }
 
         .alert-content { flex: 1; }
 
@@ -1132,10 +1128,10 @@
             letter-spacing: 0.05em;
         }
 
-        .alert-type-badge.threshold { background: rgba(220, 38, 38, 0.15); color: var(--risk-high); }
-        .alert-type-badge.change { background: rgba(245, 158, 11, 0.15); color: var(--risk-medium); }
-        .alert-type-badge.association { background: rgba(247, 127, 0, 0.15); color: var(--accent-alt); }
-        .alert-type-badge.community { background: rgba(6, 167, 125, 0.15); color: var(--success); }
+        .alert-type-badge.threshold { background: rgba(255, 77, 106, 0.12); color: var(--risk-high); }
+        .alert-type-badge.change { background: rgba(255, 188, 66, 0.12); color: var(--risk-medium); }
+        .alert-type-badge.association { background: rgba(58, 141, 255, 0.12); color: var(--accent-alt); }
+        .alert-type-badge.community { background: rgba(0, 230, 160, 0.12); color: var(--success); }
 
         /* Risk mini bars in table */
         .risk-mini-bars {
@@ -2598,8 +2594,8 @@
                 <div class="card-header">
                     <h2 class="card-title">报告预览</h2>
                     <div style="display: flex; gap: 0.5rem; font-size: 0.8rem;">
-                        <span style="padding: 0.25rem 0.75rem; background: rgba(6,167,125,0.15); color: var(--success); border-radius: 4px;">事实准确率: 91.3%</span>
-                        <span style="padding: 0.25rem 0.75rem; background: rgba(6,167,125,0.15); color: var(--success); border-radius: 4px;">引用有效率: 93.4%</span>
+                        <span style="padding: 0.25rem 0.75rem; background: rgba(0, 230, 160, 0.12); color: var(--success); border-radius: 4px;">事实准确率: 91.3%</span>
+                        <span style="padding: 0.25rem 0.75rem; background: rgba(0, 230, 160, 0.12); color: var(--success); border-radius: 4px;">引用有效率: 93.4%</span>
                     </div>
                 </div>
 
@@ -2611,7 +2607,7 @@
 
                     <div class="report-section-label">一、实体概况</div>
                     <p style="color: var(--text-secondary);">
-                        <strong style="color: var(--accent-alt);">Novatek (ПАО «НОВАТЭК»)</strong> 是俄罗斯最大的独立天然气生产商，总部位于莫斯科，主营液化天然气 (LNG) 生产与出口业务。
+                        <strong style="color: var(--accent);">Novatek (ПАО «НОВАТЭК»)</strong> 是俄罗斯最大的独立天然气生产商，总部位于莫斯科，主营液化天然气 (LNG) 生产与出口业务。
                         截至评估时点，该实体<strong style="color: var(--risk-medium);">未被美国 OFAC 直接列入 SDN 清单</strong>，但已被欧盟列入部分限制措施名单。
                         <span class="evidence-ref">[来源: OpenSanctions, 2025-12-15]</span>
                     </p>
@@ -2633,15 +2629,15 @@
 
                     <div class="report-section-label">三、主要风险驱动因素</div>
                     <p style="color: var(--text-secondary);">
-                        <strong style="color: var(--accent-alt);">1. 社群风险外溢 (CommRisk: 0.71 → 0.84):</strong> Novatek 所在社群 comm_russia_energy_17 中包含 8 个已被 OFAC 制裁的实体 (Rosneft, Gazprom 等)，社群整体风险水平持续上升。
+                        <strong style="color: var(--accent);">1. 社群风险外溢 (CommRisk: 0.71 → 0.84):</strong> Novatek 所在社群 comm_russia_energy_17 中包含 8 个已被 OFAC 制裁的实体 (Rosneft, Gazprom 等)，社群整体风险水平持续上升。
                         <span class="evidence-ref">[来源: Leiden 社群分析, v20260206-003]</span>
                     </p>
                     <p style="color: var(--text-secondary);">
-                        <strong style="color: var(--accent-alt);">2. 间接控制关联:</strong> 图谱路径分析显示 Novatek → OWNED_BY → Mikhelson (0.23 equity) → ACTS_FOR → Novatek Management，其中 Mikhelson 已被 EU 列入制裁清单。
+                        <strong style="color: var(--accent);">2. 间接控制关联:</strong> 图谱路径分析显示 Novatek → OWNED_BY → Mikhelson (0.23 equity) → ACTS_FOR → Novatek Management，其中 Mikhelson 已被 EU 列入制裁清单。
                         <span class="evidence-ref">[来源: EU Regulation 269/2014, 2024-06-24]</span>
                     </p>
                     <p style="color: var(--text-secondary);">
-                        <strong style="color: var(--accent-alt);">3. 项目级制裁传导:</strong> Novatek 的 Arctic LNG 2 项目 (持股 60%) 被 OFAC 于 2025-02 直接制裁，通过 OWNS 关系传导风险至母公司。PPR 结构影响力分量从 0.48 升至 0.62。
+                        <strong style="color: var(--accent);">3. 项目级制裁传导:</strong> Novatek 的 Arctic LNG 2 项目 (持股 60%) 被 OFAC 于 2025-02 直接制裁，通过 OWNS 关系传导风险至母公司。PPR 结构影响力分量从 0.48 升至 0.62。
                         <span class="evidence-ref">[来源: OFAC SDN List, 2025-02-23]</span>
                     </p>
 
@@ -2895,7 +2891,7 @@
             const element = document.getElementById(evidenceId);
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                element.style.background = 'rgba(247, 127, 0, 0.2)';
+                element.style.background = 'rgba(0, 198, 255, 0.15)';
                 setTimeout(() => {
                     element.style.background = '';
                 }, 2000);
